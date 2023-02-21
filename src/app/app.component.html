@@ -1,0 +1,122 @@
+<!-- <div>
+  <nav class="navbar navbar-expand navbar-dark bg-dark">
+    <a href="#" class="navbar-brand">Angular 10 CRUD</a>
+    <div class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a routerLink="tutorials" class="nav-link">Tutorials</a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="add" class="nav-link">Add</a>
+      </li>
+    </div>
+  </nav>
+
+  <div class="container mt-3">
+    <router-outlet></router-outlet>
+  </div>
+</div> -->
+
+<mat-toolbar color="primary">
+  <span>Angular 10 CRUD</span>
+  <span class="spacer"></span>
+  Reload data:
+  <button mat-icon-button>
+    <mat-icon>refresh</mat-icon>
+  </button>
+</mat-toolbar>
+<div class="container mat-elevation-z8">
+  <div class="form">
+    <mat-form-field floatPlaceholder="never" color="accent">
+      <!-- <input matInput #filter placeholder="Filter items"> -->
+      <!-- <mat-select [(value)]="service.branchId"> -->
+      <mat-label>Filter By Branch</mat-label>
+      <mat-select [(value)]="selectedBranch" (selectionChange)="branchFilterChanged($event.value)">
+        <mat-option *ngFor="let branch of branches" [value]="branch.id">
+          {{branch.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-button color="primary" (click)="filterAll()">Filter All</button>
+  </div>
+
+  <mat-table #table matSort [dataSource]="dataSource" class="mat-cell">
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.name}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="instanceId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Instance</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{getInstanceName(row.instanceId)}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="branchId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Branch</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{getBranchName(row.branchId)}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="isEnabled">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Enabled</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox [checked]="row.isEnabled" disabled color="primary">
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
+    <!-- <ng-container matColumnDef="url">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Url</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.url}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="created_at">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Created at</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.created_at}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="updated_at">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Updated at</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.updated_at}}</mat-cell>
+    </ng-container> -->
+
+    <!-- actions -->
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>
+        <button mat-icon-button color="primary" (click)="addNew()">
+          <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
+        </button>
+      </mat-header-cell>
+
+      <mat-cell *matCellDef="let row; let i=index;">
+        <button mat-icon-button color="accent" (click)="startEdit(row.id, row.name, row.branchId, row.instanceId, row.isEnabled)">
+          <mat-icon aria-label="Edit">edit</mat-icon>
+        </button>
+
+        <button mat-icon-button color="accent" (click)="deleteItem(row.id)">
+          <mat-icon aria-label="Delete">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+
+  <div class="no-results" [style.display]="services ? (services.length == 0 ? '' : 'none') : 'none'">
+    No results
+  </div>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  <!-- <mat-paginator #paginator [length]="services ? services.length : 0" [pageIndex]="0" [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator> -->
+</div>

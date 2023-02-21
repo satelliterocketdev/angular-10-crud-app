@@ -1,0 +1,58 @@
+<div class="container">
+  <h3 mat-dialog-title>Add new Service</h3>
+
+  <form class="mat-dialog-content" (ngSubmit)="submit" #formControl="ngForm">
+
+    <!-- <div class="form">
+      <mat-form-field color="accent">
+        <input matInput #input class="form-control" placeholder="Id" [(ngModel)]="service.id" name="id" required >
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div> -->
+
+    <!--Textarea for name-->
+    <div class="form">
+      <mat-form-field color="accent">
+        <textarea matInput #input class="form-control" placeholder="Name" [(ngModel)]="service.name" name="name" required ></textarea>
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field color="accent">
+        <!-- <textarea matInput #input class="form-control" placeholder="BranchId" [(ngModel)]="data.branchId" name="branchId" required ></textarea> -->
+        <mat-label>Branch</mat-label>
+        <mat-select [(value)]="service.branchId">
+          <mat-option *ngFor="let branch of branches" [value]="branch.id">
+            {{branch.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    
+    <div class="form">
+      <mat-form-field color="accent">
+        <!-- <textarea matInput #input class="form-control" placeholder="BranchId" [(ngModel)]="data.branchId" name="branchId" required ></textarea> -->
+        <mat-label>Instance</mat-label>
+        <mat-select [(value)]="service.instanceId">
+          <mat-option *ngFor="let instance of instances" [value]="instance.id">
+            {{instance.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-checkbox [(ngModel)]="service.isEnabled" name="isEnabled"
+                    color="primary">
+        Enabled
+      </mat-checkbox>
+    </div>
+
+    <div mat-dialog-actions>
+      <button mat-button [type]="submit" [disabled]="!formControl.valid" [mat-dialog-close]="1" (click)="confirmAdd()">Save</button>
+      <button mat-button (click)="onNoClick()" tabindex="-1">Cancel</button>
+    </div>
+    
+  </form>
+</div>
